@@ -175,7 +175,7 @@ static int url_handler(void *cls, struct MHD_Connection *connection,
         if (NULL == con_info) return MHD_NO;
         static int idCounter = 1;
         con_info->id = idCounter++;
-        con_info->url = std::string(url);
+        con_info->url = std::string(url ? url : "");
         con_info->data = NULL;
         con_info->biomapsId = NULL;
         con_info->dataSize = 0;
@@ -183,7 +183,8 @@ static int url_handler(void *cls, struct MHD_Connection *connection,
         {
             std::cout << "Setting up con_cls for POST: " << con_info->id << std::endl;
             std::cout << " - with url: " << url << std::endl;
-            std::string contentType(MHD_lookup_connection_value(connection, MHD_HEADER_KIND, "Content-type"));
+            const char* tmp = MHD_lookup_connection_value(connection, MHD_HEADER_KIND, "Content-type");
+            std::string contentType(tmp ? tmp : "");
             if (contentType.find(JSON_CONTENT_TYPE) == std::string::npos)
             {
                 std::cerr << "Error creating POST processor?! Unhandled content type: "
