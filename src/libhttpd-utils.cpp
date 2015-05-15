@@ -175,7 +175,8 @@ static int url_handler(void *cls, struct MHD_Connection *connection,
         if (NULL == con_info) return MHD_NO;
         static int idCounter = 1;
         con_info->id = idCounter++;
-        con_info->url = std::string(url ? url : "");
+        // FIXME: for some reason this line causes segfaults under linux?
+        //con_info->url = std::string(url ? url : "");
         con_info->data = NULL;
         con_info->biomapsId = NULL;
         con_info->dataSize = 0;
